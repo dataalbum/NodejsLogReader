@@ -1,0 +1,14 @@
+{
+  "name": "NodejsLogReader",
+  "version": "0.0.0",
+  "description": "NodejsLogReader",
+  "main": "server.js",
+  "author": {
+    "name": "Riina",
+    "email": ""
+  },
+  "dependencies": {
+    "amqplib": "^0.3.2",
+    "mongodb": "^2.0.31"
+  }
+}
