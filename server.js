@@ -3,11 +3,12 @@
 var amqp = require('amqplib');
 var MongoClient = require('mongodb').MongoClient;
 var dbUri = process.env.MONGOLAB_URI || 'mongodb://127.0.0.1:27017/logs';
+var amqpUri = process.env.CLOUDAMQP_URI || 'amqp://ontpcbos:7G7Ilh2wbERfJNHZMhfHTHJPaj4GDGu1@bunny.cloudamqp.com/ontpcbos';//'amqp:://127.0.0.1';
 var port = process.env.OPENSHIFT_NODEJS_PORT || 1337,
     ip = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 var http = require('http');
 
-amqp.connect('amqp://ontpcbos:7G7Ilh2wbERfJNHZMhfHTHJPaj4GDGu1@bunny.cloudamqp.com/ontpcbos').then(function (conn) {
+amqp.connect(amqpUri).then(function (conn) {
     process.once('SIGINT', function () { conn.close(); });
     return conn.createChannel().then(function (ch) {
         var ex = 'logs';
