@@ -7,6 +7,13 @@ var amqpUri = process.env.CLOUDAMQP_URI || 'amqp:://127.0.0.1';
 var port = process.env.OPENSHIFT_NODEJS_PORT || 1337,
     ip = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 var http = require('http');
+var coll;
+
+MongoClient.connect(dbUri, function (err, db) {
+    if (err) throw err;
+    console.log(" Connected to Database");
+    coll = db.collection('templog');
+});
 
 amqp.connect(amqpUri).then(function (conn) {
     process.once('SIGINT', function () { conn.close(); });
@@ -47,16 +54,16 @@ amqp.connect(amqpUri).then(function (conn) {
             
             //MongoDB connetion
             //MongoClient.connect('mongodb://127.0.0.1:27017/logs', function (err, db) {
-            MongoClient.connect(dbUri, function (err, db) {
-                if (err) throw err;
-                console.log(" Connected to Database");
+            //MongoClient.connect(dbUri, function (err, db) {
+            //    if (err) throw err;
+            //    console.log(" Connected to Database");
                 
                 // insert multiple documents
-                db.collection('templog').insert(sensorData, function (err, result) {
-                    if (err) throw err;
-                    console.log(" Record added as " + sensorData[0]._id);
-                });
+            coll.insert(sensorData, function (err, result) {
+                if (err) throw err;
+                console.log(" Record added as " + sensorData[0]._id);
             });
+            //});
         }
     });
 }).then(null, console.warn);
